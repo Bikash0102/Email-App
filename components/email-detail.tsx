@@ -98,7 +98,7 @@ const renderAnalysisButton = () => {
   if (email.type === "PO Acknowledgment") return null
 
   return (
-    <div className="flex gap-4 mt-6">
+    <div className="flex gap-4 ">
       <button
         onClick={handleAnalyze}
         className={linkButtonClass}
@@ -120,7 +120,7 @@ const renderAnalysisButton = () => {
 const renderActionButtons = () => {
   if (email.type === "PO Discrepancy Alert") {
     return (
-      <div className="flex gap-4 mt-6">
+      <div className="flex gap-4 ">
         <button onClick={onShowChangesDialog} className={linkButtonClass}>
           Review Changes
         </button>
@@ -130,7 +130,7 @@ const renderActionButtons = () => {
 
   if (email.type === "Invoice Missing PO") {
     return (
-      <div className="flex gap-4 mt-6">
+      <div className="flex gap-4 ">
         <button onClick={onShowResponseDialog} className={linkButtonClass}>
           View Response
         </button>
@@ -151,8 +151,29 @@ const renderActionButtons = () => {
   return null
 }
 
+const splitMarker = "Best regards,";
+const markerIndex = email.body.indexOf(splitMarker);
+
+let partBefore = email.body;
+let partAfter = '';
+
+if (markerIndex !== -1) {
+
+  let splitPoint = markerIndex;
+  let lastNewlineBefore = email.body.lastIndexOf('\n', markerIndex - 1);
+
+  if (lastNewlineBefore !== -1) {
+      splitPoint = lastNewlineBefore + 1; // Split just after the newline
+  } else {
+      splitPoint = 0; 
+  }
+
+  partBefore = email.body.substring(0, splitPoint);
+  partAfter = email.body.substring(splitPoint);
+}
+
   return (
-    <div className="h-full  w-full flex flex-col bg-white">
+ <div className="w-full flex flex-col h-full max-h-[900px] bg-white ">
       {/* Email Header */}
       <div className="p-6 border-b border-slate-200 bg-slate-50">
         <div className="space-y-4">
@@ -200,16 +221,30 @@ const renderActionButtons = () => {
       </div>
 
       {/* Email Body */}
-      <div className="flex-1 overflow-auto p-6">
+      <div className="flex-1 p-6 ">
         <div className="space-y-6">
           <div>
            
-            <div className="bg-white  rounded-lg">
-              <p className="text-sm whitespace-pre-line text-slate-700 leading-relaxed">{email.body}</p>
+            <div className="bg-white  rounded-lg  overflow-y-auto ">
+              <div className="text-sm whitespace-pre-line text-slate-700  leading-relaxed">
+                {partBefore}
+
+        {/* Insert the button section only if the marker was found */}
+        {markerIndex !== -1 && (
+          // This div is inserted directly into the text flow handled by whitespace-pre-line
+          <div className="flex justify-between ">
+            {renderAnalysisButton()}
+            {renderActionButtons()}
+          </div>
+        )}
+
+        {/* Render the part of the text after the button section */}
+        {partAfter}
+         </div>
             </div>
           </div>
 
-      <div className="flex  justify-between h-40">
+      {/* <div className="flex  justify-between h-40">
            {
           renderAnalysisButton()
 }
@@ -217,7 +252,7 @@ const renderActionButtons = () => {
 {
   renderActionButtons()
 }
-      </div>
+      </div> */}
  
 
       

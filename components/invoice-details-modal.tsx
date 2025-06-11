@@ -325,12 +325,9 @@ export function InvoiceDetailsModal({ onClose, onPaymentApproved }: InvoiceDetai
           </div>
         ) : (
           <>
-            <div className="p-5 border-b border-gray-200 flex justify-between items-center bg-blue-600">
-              <h2 className="text-2xl font-semibold text-white flex items-center">
-                <FileText className="mr-3 h-6 w-6" />
-                Invoice Details
-              </h2>
-              <button onClick={onClose} className="text-white/70 hover:text-white">
+            <div className="p-5  flex justify-end items-center">
+             
+              <button onClick={onClose} className="text-black hover:text-white">
                 <X className="h-6 w-6" />
               </button>
             </div>
@@ -346,11 +343,11 @@ export function InvoiceDetailsModal({ onClose, onPaymentApproved }: InvoiceDetai
                 <div className="bg-white border border-gray-200 rounded-md p-10 shadow-sm max-w-4xl mx-auto">
                   <div className="flex justify-between items-start mb-10">
                     <div>
-                      <h3 className="text-3xl font-bold text-blue-600">INVOICE</h3>
+                      <h3 className="text-3xl font-bold text-black">INVOICE</h3>
                       <p className="text-gray-600 text-lg mt-1">Invoice #INV-2025-0078</p>
                     </div>
                     <div className="text-right">
-                      <div className="text-2xl font-bold text-blue-600">Detroit Chemical Corporation</div>
+                      <div className="text-2xl font-bold text-black">Detroit Chemical Corporation</div>
                       <p className="text-gray-600 text-lg">4750 Innovation Boulevard</p>
                       <p className="text-gray-600 text-lg">Detroit, Michigan</p>
                       <p className="text-gray-600 text-lg">USA</p>

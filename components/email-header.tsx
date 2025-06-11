@@ -36,7 +36,7 @@ export function EmailHeader() {
         {/* Outlook Logo */}
         <div className="flex items-center gap-2 flex-shrink-0">
           <Mail className="h-5 w-5" />
-          <span className="font-semibold text-sm">Outlook</span>
+          <span className="font-semibold text-sm">Miraxon</span>
         </div>
 
         {/* Search Bar - Properly centered and responsive */}

@@ -556,7 +556,8 @@ Affected Chemicals:
 Reason: Raw material cost inflation and supply chain disruptions
 
 Please review and take appropriate action.
-Best regards,
+
+Best regards, 
 System Generated Alert
 ChemCorp Procurement Management System`,
       isRead: false,
@@ -710,6 +711,7 @@ ChemCorp Accounts Payable Team`,
       time: "9:20 AM",
       preview: "Chemical invoice received for PO #CHM-12347...",
       body: `Dear ChemCorp Customer,
+
 Chemical Invoice #INV-CHM-456 has been received and is ready for processing.
 
 Invoice Details:
@@ -725,8 +727,10 @@ Chemical Line Items:
 - Hazmat Handling & Transportation: $1,500.00
 
 All chemicals include SDS, COA, and regulatory compliance documentation.
+
 Payment Terms: Net 30
 Payment Method: Bank Transfer
+
 Please process payment by the due date.
 
 Best regards,
@@ -939,7 +943,7 @@ export default function OutlookEmailApp() {
     </div>
 
     {/* Email detail (right section, scrollable) */}
-    <div className="flex-1  h-100vh overflow-y-auto  bg-white">
+    <div className="flex-1 overflow-y-auto h-full bg-white">
       <EmailDetail
         email={selectedEmail}
         onShowInvoiceDialog={handleShowInvoiceDetailsModal}

@@ -1,6 +1,7 @@
 "use client"
 
 import { useState } from "react"
+// Removed Button import as we'll style basic elements
 import { Button } from "@/components/ui/button"
 import { Card, CardContent } from "@/components/ui/card"
 import { Badge } from "@/components/ui/badge"
@@ -19,6 +20,7 @@ import {
   Share2,
   FileText,
 } from "lucide-react"
+
 import { cn } from "@/lib/utils"
 
 interface Email {
@@ -72,12 +74,14 @@ export function EmailDetail({
   const [isAnalyzing, setIsAnalyzing] = useState<boolean>(false)
 
   const handleAnalyze = () => {
-  
     setIsAnalyzing(true)
-
-   
-      onShowAnalysis()
- 
+    // Assume onShowAnalysis might eventually set isAnalyzing back to false
+    // or that a separate state/effect handles the completion of analysis.
+    // For this example, we'll just set it true on click.
+    // In a real app, you'd likely have a callback or promise handling.
+    onShowAnalysis()
+    // Maybe add a timeout or handle the state change based on the analysis dialog closing
+    // setTimeout(() => setIsAnalyzing(false), 2000); // Example to turn off after a delay
   }
 
   if (!email) {
@@ -92,24 +96,36 @@ export function EmailDetail({
     )
   }
 
-const linkButtonClass = "text-blue-600 underline hover:text-blue-800 text-sm font-medium"
+// Define classes for the hyperlink-like appearance
+const linkStyleClasses = "inline-flex items-center text-blue-600 hover:text-blue-800 text-sm font-medium leading-relaxed cursor-pointer"; // Use inline-flex to align icon and text, add cursor-pointer
 
 const renderAnalysisButton = () => {
   if (email.type === "PO Acknowledgment") return null
 
   return (
-    <div className="flex gap-4 ">
-      <button
+    <div className="flex gap-4"> {/* Keep flex gap for spacing between buttons in the row */}
+      {/* Analyze Link/Button */}
+      <button 
         onClick={handleAnalyze}
-        className={linkButtonClass}
+        disabled={isAnalyzing}
+      
+        className={cn(linkStyleClasses, isAnalyzing && "opacity-50 cursor-not-allowed")} // Add disabled styling
       >
+        {isAnalyzing ? (
+          <Loader2 className="mr-1 h-4 w-4 animate-spin text-blue-500" /> // Spinner with blue color
+        ) : (
+          <BarChart3 className="mr-1 h-4 w-4 text-blue-500" /> // Analysis icon with blue color
+        )}
         Analyze Email
       </button>
 
      
-
       {email.type === "SAP Invoice" && (
-        <button onClick={onShowInvoiceDialog} className={linkButtonClass}>
+        <button
+          onClick={onShowInvoiceDialog}
+          className={linkStyleClasses} // Apply link styling classes
+        >
+          <Receipt className="mr-1 h-4 w-4 text-blue-500" /> {/* Invoice/Receipt icon with blue color */}
           View Details
         </button>
       )}
@@ -118,10 +134,15 @@ const renderAnalysisButton = () => {
 }
 
 const renderActionButtons = () => {
+  
   if (email.type === "PO Discrepancy Alert") {
     return (
-      <div className="flex gap-4 ">
-        <button onClick={onShowChangesDialog} className={linkButtonClass}>
+      <div className="flex gap-4"> {/* Keep flex gap */}
+        <button
+          onClick={onShowChangesDialog}
+          className={linkStyleClasses} // Apply link styling classes
+        >
+           <FileText className="mr-1 h-4 w-4 text-blue-500" /> {/* Icon with blue color */}
           Review Changes
         </button>
       </div>
@@ -130,25 +151,33 @@ const renderActionButtons = () => {
 
   if (email.type === "Invoice Missing PO") {
     return (
-      <div className="flex gap-4 ">
-        <button onClick={onShowResponseDialog} className={linkButtonClass}>
+      <div className="flex gap-4"> {/* Keep flex gap */}
+        <button
+          onClick={onShowResponseDialog}
+          className={linkStyleClasses} // Apply link styling classes
+        >
+          <MessageSquare className="mr-1 h-4 w-4 text-blue-500" /> {/* Icon with blue color */}
           View Response
         </button>
       </div>
     )
   }
-  
-    if(email.type === "Invoice Received" ) {
+
+  if(email.type === "Invoice Received" ) {
       return(
-        <div className="flex gap-4 mt-6">
-        <button onClick={onShowInvoiceDialog} className={linkButtonClass}>
+        <div className="flex gap-4"> {/* Keep flex gap */}
+        <button
+          onClick={onShowInvoiceDialog}
+          className={linkStyleClasses} // Apply link styling classes
+        >
+          <Receipt className="mr-1 h-4 w-4 text-blue-500" /> {/* Icon with blue color */}
           View Invoice Details
         </button>
         </div>
       )
-      }
+  }
 
-  return null
+  return null 
 }
 
 const splitMarker = "Best regards,";
@@ -158,19 +187,20 @@ let partBefore = email.body;
 let partAfter = '';
 
 if (markerIndex !== -1) {
-
   let splitPoint = markerIndex;
+ 
   let lastNewlineBefore = email.body.lastIndexOf('\n', markerIndex - 1);
 
   if (lastNewlineBefore !== -1) {
       splitPoint = lastNewlineBefore + 1; // Split just after the newline
   } else {
-      splitPoint = 0; 
+      splitPoint = 0;
   }
 
   partBefore = email.body.substring(0, splitPoint);
   partAfter = email.body.substring(splitPoint);
 }
+
 
   return (
  <div className="w-full flex flex-col h-full max-h-[900px] bg-white ">
@@ -183,7 +213,7 @@ if (markerIndex !== -1) {
               <div className="flex items-center gap-2">
                 <Badge className={cn("text-xs", getEmailTypeColor(email.type))}>{email.type}</Badge>
                 {onReferEmail && (
-                  <Button
+                  <Button 
                     variant="outline"
                     size="sm"
                     onClick={() => onReferEmail(email)}
@@ -221,41 +251,31 @@ if (markerIndex !== -1) {
       </div>
 
       {/* Email Body */}
-      <div className="flex-1 p-6 ">
+      <div className="flex-1 mb-16 p-6 overflow-y-auto">
         <div className="space-y-6">
           <div>
-           
-            <div className="bg-white  rounded-lg  overflow-y-auto ">
-              <div className="text-sm whitespace-pre-line text-slate-700  leading-relaxed">
-                {partBefore}
+          
+            <div className="bg-white rounded-lg text-sm whitespace-pre-line text-slate-700 leading-relaxed">
 
-        {/* Insert the button section only if the marker was found */}
-        {markerIndex !== -1 && (
-          // This div is inserted directly into the text flow handled by whitespace-pre-line
-          <div className="flex justify-between ">
-            {renderAnalysisButton()}
-            {renderActionButtons()}
+             
+              {partBefore}
+
+              
+              {markerIndex !== -1 && (
+               
+                <div className="flex gap-6  mb-4">
+                 
+                  {renderAnalysisButton()}
+                  {renderActionButtons()}
+                </div>
+              )}
+
+              
+              {partAfter}
+           </div> 
           </div>
-        )}
 
-        {/* Render the part of the text after the button section */}
-        {partAfter}
-         </div>
-            </div>
-          </div>
 
-      {/* <div className="flex  justify-between h-40">
-           {
-          renderAnalysisButton()
-}
-      
-{
-  renderActionButtons()
-}
-      </div> */}
- 
-
-      
         </div>
       </div>
     </div>

@@ -71,17 +71,13 @@ export function EmailDetail({
   showAnalysis,
   onReferEmail,
 }: EmailDetailProps) {
-  const [isAnalyzing, setIsAnalyzing] = useState<boolean>(false)
+
 
   const handleAnalyze = () => {
-    setIsAnalyzing(true)
-    // Assume onShowAnalysis might eventually set isAnalyzing back to false
-    // or that a separate state/effect handles the completion of analysis.
-    // For this example, we'll just set it true on click.
-    // In a real app, you'd likely have a callback or promise handling.
+    
+   
     onShowAnalysis()
-    // Maybe add a timeout or handle the state change based on the analysis dialog closing
-    // setTimeout(() => setIsAnalyzing(false), 2000); // Example to turn off after a delay
+   
   }
 
   if (!email) {
@@ -107,15 +103,13 @@ const renderAnalysisButton = () => {
       {/* Analyze Link/Button */}
       <button 
         onClick={handleAnalyze}
-        disabled={isAnalyzing}
+
       
-        className={cn(linkStyleClasses, isAnalyzing && "opacity-50 cursor-not-allowed")} // Add disabled styling
+        className={cn(linkStyleClasses)} // Add disabled styling
       >
-        {isAnalyzing ? (
-          <Loader2 className="mr-1 h-4 w-4 animate-spin text-blue-500" /> // Spinner with blue color
-        ) : (
+        {
           <BarChart3 className="mr-1 h-4 w-4 text-blue-500" /> // Analysis icon with blue color
-        )}
+      }
         Analyze Email
       </button>
 
